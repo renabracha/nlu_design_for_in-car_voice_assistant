@@ -1,15 +1,18 @@
 # Natural Language Understanding Design for In-Car Voice Assistant
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)]
+(https://colab.research.google.com/github/renabracha/nlu_design_for_in-car_voice_assistant/blob/main/In_car_voice_assistant_NLU_module.ipynb)
+
 ## Acknowledgment
-I would like to thank the following individuals and organisations that made this project possible.
+I would like to thank the following individuals and organizations that made this project possible.
 •	Groq for providing me free access to their API key and thereby allowing me to gain hands-on experience in making API calls without having to constantly worry about token limits.
 
 ## Abstract
-Traditional in-car voice assistant NLU modules built on classical seq2seq models face several limitations. These include the manual effort required to maintain extensive glossaries of world knowledge with incomplete coverage, the need for massive amounts of training data to handle natural language effectively, and slow iteration cycles that take hours, if not, days to train, evaluate, and test. Furthermore, these models often struggle to generalise, requiring repeated tweaking to handle specific utterances. Attempting to unify conflicting intent-slot schemas across multiple car brands within a single model typically results in subpar performance. Some brand-specific customisations, by overriding model defaults to align with proprietary intents and slots, often fail to yield reliable results. Finally, enumerating every possible intent-slot combination leads to bloated, unreadable specifications that remain incomplete and difficult to maintain.
+Traditional in-car voice assistant NLU modules built on classical seq2seq models face several limitations. These include the manual effort required to maintain extensive glossaries of world knowledge with incomplete coverage, the need for massive amounts of training data to handle natural language effectively, and slow iteration cycles that take hours, if not, days to train, evaluate, and test. Furthermore, these models often struggle to generalize, requiring repeated tweaking to handle specific utterances. Attempting to unify conflicting intent-slot schemas across multiple car brands within a single model typically results in subpar performance. Some brand-specific customizations, by overriding model defaults to align with proprietary intents and slots, often fail to yield reliable results. Finally, enumerating every possible intent-slot combination leads to bloated, unreadable specifications that remain incomplete and difficult to maintain.
 This project explores a solution using a large language model (LLM)-based assistant, which aims to overcome these challenges through prompt-based intent classification and slot extraction, offering greater flexibility, scalability, faster iteration, and better adaptability across brands.
 
-## Design Notes
-## Guide, Not Teach
+## Development Notes
+### Guide, Not Teach
 Large language models (LLMs) already come with the knowledge of natural languages. The task for NLU developers is to pull out that innate knowledge in LLMs and channel it in a certain direction. Fine-tuning a model is expensive, and the good news is that a lot can be done with prompt engineering—which is cheaper and faster. The languages, the model already knows. What it needs is guidance on how to classify intents and slots found in utterances in ways that suit brand-specific, custom classification systems.
 
 Instead of an exhaustive list of intent-slot combinations for each domain, the model is given:
@@ -34,7 +37,7 @@ This model capability is supported by Anthropic’s 2024 paper, *Tracing the Tho
 
 ---
 
-## Domain-Intent Segregation
+### Domain-Intent Segregation
 
 An utterance is first classified into a **domain** by a domain classifier, then into an **intent-slot** pair by a domain-specific classifier. This separation enables domain-specific prompts tailored for accurate, specialised tagging.
 
@@ -42,7 +45,7 @@ Multi-intent utterances are broken into sub-utterances, each containing one inte
 
 ---
 
-## Clear Reasoning Leads to Better Classification
+### Clear Reasoning Leads to Better Classification
 
 I added a `rationale` field to the model's output, alongside a confidence score. Asking the model to explain its reasoning for domain, intent, and slot choices increases classification accuracy.
 
@@ -50,7 +53,7 @@ During human-in-the-loop evaluation, these rationales provide insight into the m
 
 ---
 
-## Dynamic and Flexible Decision Making
+### Dynamic and Flexible Decision Making
 
 A prompt is a set of instructions. If written well, the model can follow them dynamically. Like a rule-based system, each rule can generalise to a wide variety of utterances. No need for an exhaustive list of examples—just describe the rule clearly.
 
@@ -63,7 +66,7 @@ This is especially valuable for languages like Japanese, where word order is fle
 
 ---
 
-## Implicit or Indirect Commands
+### Implicit or Indirect Commands
 
 The model can handle implicit utterances and indirect commands like:
 
@@ -75,13 +78,13 @@ Instead of asking for clarification, the model extrapolates the intended direct 
 
 ---
 
-## Overfitting
+### Overfitting
 
 Overfitting, in the classical ML sense, is not a concern with prompt engineering. A pretrained LLM is a frozen model—its parameters don't change based on your inputs. There is no training unless you explicitly fine-tune.
 
 You can reuse the same utterances and prompts during development without affecting the model’s long-term behaviour.
 
-However, **prompt overspecialisation** is a real concern:
+However, **prompt overspecialization** is a real concern:
 - If you test only on a narrow set of examples
 - And never generalise to new ones
 
@@ -89,7 +92,7 @@ The model may appear to perform well, but fail on unseen data. It’s not overfi
 
 ---
 
-## Handling Ambiguity
+### Handling Ambiguity
 
 Natural language is ambiguous. For example:
 
@@ -101,7 +104,7 @@ I address these ambiguous cases with explanations and contrasting example pairs 
 
 ---
 
-## Scalability
+### Scalability
 
 In production, an in-car assistant may need to manage hundreds of carrier phrases per domain, resulting in long lists of intents and slots.
 
@@ -118,7 +121,7 @@ To scale intent-slot definitions:
 
 ## Future Work
 
-### Brand Customisation
+### Brand Customization
 
 Custom brand-specific intent-slot combinations can be supported by tagging them appropriately in the domain-specific prompts. The NLU module can switch between brands by accepting a brand identifier along with the driver’s utterance.
 
