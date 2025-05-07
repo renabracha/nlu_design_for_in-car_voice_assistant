@@ -13,7 +13,7 @@ This project explores a solution using a large language model (LLM)-based assist
 
 ## Development Notes
 ### Guide, Not Teach
-Large language models (LLMs) already come with the knowledge of natural languages. The task for NLU developers is to pull out that innate knowledge in LLMs and channel it in a certain direction. Fine-tuning a model is expensive, and the good news is that a lot can be done with prompt engineering—which is cheaper and faster. The languages, the model already knows. What it needs is guidance on how to classify intents and slots found in utterances in ways that suit brand-specific, custom classification systems.
+Large language models (LLMs) already come with the knowledge of natural languages. The task for NLU developers is to pull out that innate knowledge in LLMs and channel it in a certain direction. Fine-tuning a model is expensive, and the good news is that a lot can be done with prompt engineering - which is cheaper and faster. The languages, the model already knows. What it needs is guidance on how to classify intents and slots found in utterances in ways that suit brand-specific, custom classification systems.
 
 Instead of an exhaustive list of intent-slot combinations for each domain, the model is given:
 
@@ -57,7 +57,7 @@ During human-in-the-loop evaluation, these rationales provide insight into the m
 
 ### Dynamic and Flexible Decision Making
 
-A prompt is a set of instructions. If written well, the model can follow them dynamically. Like a rule-based system, each rule can generalise to a wide variety of utterances. No need for an exhaustive list of examples—just describe the rule clearly.
+A prompt is a set of instructions. If written well, the model can follow them dynamically. Like a rule-based system, each rule can generalise to a wide variety of utterances. No need for an exhaustive list of examples - just describe the rule clearly.
 
 The model remains robust even when:
 - Word order is slightly changed
@@ -76,13 +76,13 @@ The model can handle implicit utterances and indirect commands like:
 
 A human would infer that the speaker is requesting warmer conditions. I use chain-of-thought prompting to model this reasoning and ask the LLM to mimic it.
 
-Instead of asking for clarification, the model extrapolates the intended direct command—e.g. increasing the temperature or turning on the heater.
+Instead of asking for clarification, the model extrapolates the intended direct command - e.g. increasing the temperature or turning on the heater.
 
 ---
 
 ### Overfitting
 
-Overfitting, in the classical ML sense, is not a concern with prompt engineering. A pretrained LLM is a frozen model—its parameters don't change based on your inputs. There is no training unless you explicitly fine-tune.
+Overfitting, in the classical ML sense, is not a concern with prompt engineering. A pretrained LLM is a frozen model - its parameters don't change based on your inputs. There is no training unless you explicitly fine-tune.
 
 You can reuse the same utterances and prompts during development without affecting the model’s long-term behaviour.
 
@@ -100,7 +100,7 @@ Natural language is ambiguous. For example:
 
 - **(A)** “Turn up the a/c” could mean increase the fan power *or* adjust the vent direction.
 - **(B)** “Skip back two songs” doesn’t translate smoothly into Japanese and may confuse users.
-- **(C)** “Avoid traffic” vs. “Show alternative roads to avoid traffic” differ in intent—rerouting vs. visual information.
+- **(C)** “Avoid traffic” vs. “Show alternative roads to avoid traffic” differ in intent-rerouting vs. visual information.
 
 I address these ambiguous cases with explanations and contrasting example pairs in the prompt to teach the model how to handle them.
 
@@ -127,12 +127,12 @@ To scale intent-slot definitions:
 
 Custom brand-specific intent-slot combinations can be supported by tagging them appropriately in the domain-specific prompts. The NLU module can switch between brands by accepting a brand identifier along with the driver’s utterance.
 
-To simplify maintenance and feature rollout, I recommend keeping a **single unified prompt** for all brands. Variations should be handled with modular schema differences—not by duplicating prompts.
+To simplify maintenance and feature rollout, I recommend keeping a **single unified prompt** for all brands. Variations should be handled with modular schema differences - not by duplicating prompts.
 
 ### Scalability for Industry-Level Voice Assistants
 In a production setting, an in-car voice assistant must handle hundreds of carrier phrases per domain, resulting in a substantial list of intents and slots. To manage this complexity without compromising responsiveness, the system must be both modular and scalable.
 For real-time, dynamic utterances - such as “What does that road sign mean?” or “What’s the speed limit here?” - a Retrieval-Augmented Generation (RAG) system is essential. These queries require live context, possibly involving sensor input, map data, or legal driving rules. Similarly, when drivers ask questions related to the vehicle manual, such as “What does this warning light mean?”, a vector-based retrieval system provides the necessary semantic search capability.
-To scale the intent-slot classification system efficiently, each domain's schema can be stored in memory as a JSON object and dynamically inserted into the prompt at runtime. This avoids bloating a single static prompt with an exhaustive list while ensuring that only relevant information is loaded when needed. Because the schemas are already preloaded in memory, lookup latency remains negligible—typically in the sub-millisecond range—making the system responsive and performant at scale.
+To scale the intent-slot classification system efficiently, each domain's schema can be stored in memory as a JSON object and dynamically inserted into the prompt at runtime. This avoids bloating a single static prompt with an exhaustive list while ensuring that only relevant information is loaded when needed. Because the schemas are already preloaded in memory, lookup latency remains negligible - typically in the sub-millisecond range - making the system responsive and performant at scale.
 
 ## Results
 ### Domain: audio media
