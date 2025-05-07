@@ -32,7 +32,7 @@ The role of an in-car voice assistant is to distill a wide variety of human utte
 - Robust against unsupported combinations (filtered later by the grounding module)
 - Encourages modular architecture: 
   - The **NLU module** handles recognition
-  - The **grounding module** handles enforcement of brand capabilities
+  - The **grounding module** handles enforcement of brand customisation
 - Multilingual flexibility with a single-source prompt
 
 This model capability is stated in Anthropic’s 2025 paper, *Tracing the thoughts of a large language model* (https://www.anthropic.com/research/tracing-thoughts-language-model), which shows that LLMs build a language-agnostic understanding of concepts and are capable of expressing them "in their own words" in any language.
