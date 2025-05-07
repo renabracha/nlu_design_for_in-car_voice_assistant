@@ -25,6 +25,8 @@ The model breaks down the utterance into atomic segments (each containing an act
 
 The role of an in-car voice assistant is to distill a wide variety of human utterances into a finite set of direct commands. LLMs are excellent interpolators. Given just the intent name, slot list with descriptions, and a few examples, they generalise to novel, valid combinations without exploding the schema size.
 
+---
+
 ### Efficiency Gains:
 - No need to maintain an exhaustive list of intent-slot combinations
 - Robust against unsupported combinations (filtered later by the grounding module)
