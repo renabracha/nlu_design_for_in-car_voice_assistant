@@ -33,7 +33,7 @@ The role of an in-car voice assistant is to distill a wide variety of human utte
   - The **grounding module** handles enforcement of brand capabilities
 - Multilingual flexibility with a single-source prompt
 
-This model capability is supported by Anthropic’s 2024 paper, *Tracing the Thoughts of a Large Language Model*, which shows that LLMs build a language-agnostic understanding of concepts and rephrase them in any language.
+This model capability is stated in Anthropic’s 2025 paper, *Tracing the thoughts of a large language model* (https://www.anthropic.com/research/tracing-thoughts-language-model), which shows that LLMs build a language-agnostic understanding of concepts and are capable of expressing them "in their own words" in any language.
 
 ---
 
