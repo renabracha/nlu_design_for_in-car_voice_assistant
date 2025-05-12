@@ -27,7 +27,7 @@ The role of an in-car voice assistant is to distill a wide variety of human utte
 
 ---
 
-### Efficiency Gains:
+### Efficiency Gains
 - No need to maintain an exhaustive list of intent-slot combinations
 - Robust against unsupported combinations (filtered later by the grounding module)
 - Encourages modular architecture: 
@@ -40,15 +40,11 @@ This model capability is stated in Anthropic’s 2025 paper, *Tracing the though
 ---
 
 ### Domain-Intent Segregation
-
 An utterance is first classified into a **domain** by a domain classifier, then into an **intent-slot** pair by a domain-specific classifier. This separation enables domain-specific prompts tailored for accurate, specialised tagging.
-
-Multi-intent utterances are broken into sub-utterances, each containing one intent-slot pair, and processed in parallel by the relevant domain-specific classifiers. This routing mechanism ensures efficient and scalable handling of compound user commands.
 
 ---
 
 ### Clear Reasoning Leads to Better Classification
-
 I added a `rationale` field to the model's output, alongside a confidence score. Asking the model to explain its reasoning for domain, intent, and slot choices increases classification accuracy.
 
 During human-in-the-loop evaluation, these rationales provide insight into the model’s thought process, helping evaluators refine prompts and improve model behaviour.
@@ -56,7 +52,6 @@ During human-in-the-loop evaluation, these rationales provide insight into the m
 ---
 
 ### Dynamic and Flexible Decision Making
-
 A prompt is a set of instructions. If written well, the model can follow them dynamically. Like a rule-based system, each rule can generalise to a wide variety of utterances. No need for an exhaustive list of examples - just describe the rule clearly.
 
 The model remains robust even when:
@@ -69,7 +64,6 @@ This is especially valuable for languages like Japanese, where word order is fle
 ---
 
 ### Implicit or Indirect Commands
-
 The model can handle implicit utterances and indirect commands like:
 
 > "I'm cold"
@@ -80,8 +74,14 @@ Instead of asking for clarification, the model extrapolates the intended direct 
 
 ---
 
-### Overfitting
+### Multi-Intent Utterances
+Multi-intent utterances are broken into sub-utterances, each containing one intent-slot pair, and processed in parallel by the relevant domain-specific classifiers. This routing mechanism ensures efficient and scalable handling of compound user commands.
 
+LangChain’s `LLMRouterChain` was not suitable for my use case, as it is designed to return a single output domain per input. To handle multi-intent utterances, I needed a router capable of returning multiple domain names, or rather a list of domain–atomic_segment pairs. The original `LLMRouterChain` failed because `MultiPromptChain` expects exactly one domain name — not a list — causing compatibility issues. To address this, a custom wrapper had to be implemented to support multi-domain routing.
+
+---
+
+### Overfitting
 Overfitting, in the classical ML sense, is not a concern with prompt engineering. A pretrained LLM is a frozen model - its parameters don't change based on your inputs. There is no training unless you explicitly fine-tune.
 
 You can reuse the same utterances and prompts during development without affecting the model’s long-term behaviour.
@@ -95,7 +95,6 @@ The model may appear to perform well, but fail on unseen data. It’s not overfi
 ---
 
 ### Handling Ambiguity
-
 Natural language is ambiguous. For example:
 
 - **(A)** “Turn up the a/c” could mean increase the fan power *or* adjust the vent direction.
@@ -107,7 +106,6 @@ I address these ambiguous cases with explanations and contrasting example pairs 
 ---
 
 ### Scalability
-
 In production, an in-car assistant may need to manage hundreds of carrier phrases per domain, resulting in long lists of intents and slots.
 
 To address this:
@@ -124,7 +122,6 @@ To scale intent-slot definitions:
 ## Future Work
 
 ### Brand Customization
-
 Custom brand-specific intent-slot combinations can be supported by tagging them appropriately in the domain-specific prompts. The NLU module can switch between brands by accepting a brand identifier along with the driver’s utterance.
 
 To simplify maintenance and feature rollout, I recommend keeping a **single unified prompt** for all brands. Variations should be handled with modular schema differences - not by duplicating prompts.
